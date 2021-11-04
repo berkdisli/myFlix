@@ -5,43 +5,63 @@ const app = express();
 let movies = [
   {
     title: 'Harry Potter and the Sorcerer\'s Stone',
-    director: 'Chris Columbus'
+    director: 'Chris Columbus',
+    genre:['Adventure', 'Family', 'Fantasy'],
+    releaseYear:2001
   },
   {
     title: 'Lord of the Rings Trilogy',
-    director: 'Peter Jackson'
+    director: 'Peter Jackson',
+    genre:['Adventure', 'Action', 'Drama'],
+    releaseYear:2001
   },
   {
     title: 'Green Mile',
-    director: 'Frank Darabont'
+    director: 'Frank Darabont',
+    genre:['Crime', 'Drama', 'Fantasy'],
+    releaseYear:1998
   },
   {
     title: 'The Shawshank Redemption ',
-    director: 'Frank Darabont'
+    director: 'Frank Darabont',
+    genre:['Drama'],
+    releaseYear:1994
   },
   {
     title: 'The Dark Knight',
-    director: 'Christopher Nolan'
+    director: 'Christopher Nolan',
+    genre:['Adventure', 'Action'],
+    releaseYear:2008
   },
   {
     title: 'Good Will Hunting',
-    director: 'Gus Van Sant'
+    director: 'Gus Van Sant',
+    genre:['Drama', 'Romance'],
+    releaseYear:1997
   },
   {
     title: 'The Godfather',
-    director: 'Francis Ford Coppola'
+    director: 'Francis Ford Coppola',
+    genre:['Crime', 'Drama',],
+    releaseYear:1972
   },
   {
     title: 'Fight Club',
-    director: 'David Fincher'
+    director: 'David Fincher',
+    genre:['Drama'],
+    releaseYear:1999
   },
   {
     title: 'Inception',
-    director: 'Christopher Nolan'
+    director: 'Christopher Nolan',
+    genre:['Adventure', 'Action', 'Sci-Fi'],
+    releaseYear:2010
   },
   {
     title: 'The Matrix',
-    director: 'Lana Wachowski & Lilly Wachowski'
+    director: 'Lana Wachowski & Lilly Wachowski',
+    genre:['Action', 'Sci-fi'],
+    releaseYear:1999
   }
 ];
 // middleware
@@ -50,15 +70,59 @@ app.use(express.static('public'));
 
 // GET requests
 app.get('/', (req, res) => {
-  res.send('Welcome to ten of my best movies which I pick!');
+  res.send('Welcome to myFlix App');
 });
 
+//Reading document.html file
 app.get('/documentation', (req, res) => {                  
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
+// Gets the list of data about ALL movies
 app.get('/movies', (req, res) => {
   res.json(movies);
+});
+
+// Gets the data about a single movie, by title
+app.get('/movies/:title', (req, res) => {
+    res.json(movies.find( (movie) => {
+        return movie.title === req.params.title 
+    }));
+});
+
+//Return data about a genre (description) by name/title (e.g., “Thriller”)
+app.get('/movies/:title/genre', (req, res) => {
+    res.send('Successful GET request returning data about a genre.');
+});
+
+//Return data about a director (bio, birth year, death year) by name
+app.get('/movies/directors/:name', (req, res) => {
+    res.send('Successful GET request returning data about a director.');
+});
+
+//New users to register
+app.post('/newUser', (req, res) => {
+    res.send('Successful POST request - new user is registered');
+});
+
+//// Updating the "username" 
+app.put('/newUser/:id/info', (req, res) => {
+    res.send('Successful PUT request - user info is updated');
+});
+
+//Adding the movie to the favourites 
+app.post('/newUser/:id/favourites', (req, res) => {
+    res.send('Successful POST request - user added a movie to their favourites');
+});
+
+//Removing movies from the favourites
+app.delete('/newUser/:id/favourites', (req, res) => {
+    res.send('Successful DELETE request - user removed movie from favourites');
+});
+
+//To deregister 
+app.delete('/newUser', (req, res) => {
+    res.send('Successful DELETE request - user has deregistered');
 });
 
 app.use((err, req, res, next) => {
