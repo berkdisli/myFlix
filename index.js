@@ -16,7 +16,7 @@ let movies = [
     releaseYear:2001
   },
   {
-    title: 'Green Mile',
+    title: 'The Green Mile',
     director: 'Frank Darabont',
     genre:['Crime', 'Drama', 'Fantasy'],
     releaseYear:1998
@@ -58,10 +58,10 @@ let movies = [
     releaseYear:2010
   },
   {
-    title: 'The Matrix',
-    director: 'Lana Wachowski & Lilly Wachowski',
-    genre:['Action', 'Sci-fi'],
-    releaseYear:1999
+    title: 'Star Wars',
+    director: 'George Lucas',
+    genre:['Action', 'Adventure', 'Fantasy'],
+    releaseYear:1977
   }
 ];
 // middleware
