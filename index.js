@@ -1,69 +1,23 @@
-const express = require('express');
-const morgan = require('morgan');
-const app = express();
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 
-let movies = [
-  {
-    title: 'Harry Potter and the Sorcerer\'s Stone',
-    director: 'Chris Columbus',
-    genre:['Adventure', 'Family', 'Fantasy'],
-    releaseYear:2001
-  },
-  {
-    title: 'Lord of the Rings Trilogy',
-    director: 'Peter Jackson',
-    genre:['Adventure', 'Action', 'Drama'],
-    releaseYear:2001
-  },
-  {
-    title: 'The Green Mile',
-    director: 'Frank Darabont',
-    genre:['Crime', 'Drama', 'Fantasy'],
-    releaseYear:1998
-  },
-  {
-    title: 'The Shawshank Redemption ',
-    director: 'Frank Darabont',
-    genre:['Drama'],
-    releaseYear:1994
-  },
-  {
-    title: 'The Dark Knight',
-    director: 'Christopher Nolan',
-    genre:['Adventure', 'Action'],
-    releaseYear:2008
-  },
-  {
-    title: 'Good Will Hunting',
-    director: 'Gus Van Sant',
-    genre:['Drama', 'Romance'],
-    releaseYear:1997
-  },
-  {
-    title: 'The Godfather',
-    director: 'Francis Ford Coppola',
-    genre:['Crime', 'Drama',],
-    releaseYear:1972
-  },
-  {
-    title: 'Fight Club',
-    director: 'David Fincher',
-    genre:['Drama'],
-    releaseYear:1999
-  },
-  {
-    title: 'Inception',
-    director: 'Christopher Nolan',
-    genre:['Adventure', 'Action', 'Sci-Fi'],
-    releaseYear:2010
-  },
-  {
-    title: 'Star Wars',
-    director: 'George Lucas',
-    genre:['Action', 'Adventure', 'Fantasy'],
-    releaseYear:1977
-  }
-];
+const Movies = Models.Movie;
+const Users = Models.User;
+
+
+
+const express = require('express');
+const bodyParser = require("body-parser");
+// const uuid = require("uuid");
+const morgan = require('morgan');
+
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.connect('mongodb://localhost:27017/test',
+ { useNewUrlParser: true, useUnifiedTopology: true });
+
 // middleware
 app.use(morgan('common'));
 app.use(express.static('public'));
@@ -80,7 +34,14 @@ app.get('/documentation', (req, res) => {
 
 // Gets the list of data about ALL movies
 app.get('/movies', (req, res) => {
-  res.json(movies);
+  Movies.find()
+  .then((movies) => {
+    res.status(201).json(movies);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error: " +err);
+  })
 });
 
 // Gets the data about a single movie, by title
@@ -100,29 +61,139 @@ app.get('/movies/directors/:name', (req, res) => {
     res.send('Successful GET request returning data about a director.');
 });
 
+// Get all users
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// Get a user by username
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
 //New users to register
-app.post('/newUser', (req, res) => {
-    res.send('Successful POST request - new user is registered');
+app.post('/users', (req, res) => {
+  Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.body.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.status(201).json(user) })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error: ' + error);
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
+});
+
+// Update a user's info, by username
+/* We’ll expect JSON in this format
+{
+  Username: String,
+  (required)
+  Password: String,
+  (required)
+  Email: String,
+  (required)
+  Birthday: Date
+}*/
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username },
+     { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
 });
 
 //// Updating the "username" 
-app.put('/newUser/:id/info', (req, res) => {
+app.put('/users/:id/info', (req, res) => {
     res.send('Successful PUT request - user info is updated');
 });
 
-//Adding the movie to the favourites 
-app.post('/newUser/:id/favourites', (req, res) => {
+//Adding the movie to the favorites with id
+app.post('/users/:id/favorites', (req, res) => {
     res.send('Successful POST request - user added a movie to their favourites');
 });
 
-//Removing movies from the favourites
-app.delete('/newUser/:id/favourites', (req, res) => {
+// Add a movie to a user's list of favorites
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+     $push: { FavoriteMovies: req.params.MovieID }
+   },
+   { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
+
+//Removing movies from the favorites with id
+app.delete('/users/:id/favorites', (req, res) => {
     res.send('Successful DELETE request - user removed movie from favourites');
 });
 
 //To deregister 
-app.delete('/newUser', (req, res) => {
+app.delete('/users', (req, res) => {
     res.send('Successful DELETE request - user has deregistered');
+});
+
+// Delete a user by username
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 app.use((err, req, res, next) => {

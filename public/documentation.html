@@ -45,7 +45,7 @@
           </tr>
           <tr>
               <td>Return data about a genre (description) by name/title (e.g., “Thriller”)</td>
-              <td>/movies/:title/genre</td>
+              <td>/movies/:title/:genre</td>
               <td>GET</td>
               <td>None</td>
               <td>A text message indicating the genre(s) of a single movie 
@@ -64,23 +64,36 @@
               </td>
           </tr>
           <tr>
+            <td>Get all users</td>
+            <td>/users</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A text message indicating data about users</td> 
+        </tr>
+        <tr>
+            <td>Get a user by username</td>
+            <td>/users/:Username</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A text message indicating data about finding a user</td> 
+        </tr>
+          <tr>
               <td>Allow new users to register</td>
-              <td>/newUser</td>
+              <td>/users</td>
               <td>POST</td>
               <td>A JSON object holding data about the new user
                   <br>
                   Example: {
-                  firstName:'Tupac',
-                  lastName: 'Shakur'
-                  username: '2pac',
-                  password: 'westside123',
-                  emailAddress: 'tashakur@gmail.com'
+                  Username: '2pac',
+                  Password: 'westside123',
+                  Email: 'tashakur@gmail.com',
+                  Birthday: "15/06/1971"
                   }
               </td>
-              <td>A JSON object holding data about the new user, with an id
+              <td>A JSON object holding data about the new user
                   <br>
                   Example: {
-                  id: 313,
+                  id: 313abc8798298eetwewe222445,
                   firstName:'Tupac',
                   lastName: 'Shakur'
                   username: '2pac',
@@ -90,18 +103,24 @@
               </td>
           </tr>
           <tr>
+            <td> Update a user's info, by username</td>
+            <td>/users/:Username</td>
+            <td>PUT</td>
+            <td>None</td>
+            <td>A text message indicating data about updating a user by username</td> 
+        </tr>
+          <tr>
               <td>Allow users to update their user info (username)</td>
-              <td>/newUser/:id/info</td>
+              <td>/users/:id/info</td>
               <td>PUT</td>
               <td>A JSON object holding data about the updated user information
                   <br>
                   Example: {
-                    firstName: 'Tupac',
-                    lastName: 'Shakur'
-                    username: '2pac',
-                    password: 'westside123',
-                    emailAddress: 'tashakur@gmail.com'
-                  }
+                    Username: 'Tupac_LA',
+                    Password: 'westside123',
+                    Email: 'tashakur@gmail.com',
+                    Birthday: "15/06/1971"
+                    }
               </td>
               <td>A text message indicating the user information was updated
                   <br>
@@ -110,7 +129,7 @@
           </tr>
           <tr>
               <td>Allow users to add a movie to their list of favorites</td>
-              <td>/newUser/:id/favourites</td>
+              <td>/users/:id/favorites</td>
               <td>POST</td>
               <td>A JSON object holding data about a single movie, containing the title, genre, director and release year. 
                   <br>
@@ -121,31 +140,47 @@
                   releaseYear: 2001
                   }
               </td>
-              <td>A text message indicating the user successfully added a new movie to their favourites
+              <td>A text message indicating the user successfully added a new movie to their favorites
                   <br>
-                  Example: "Avengers was successfully added to your favourites."
+                  Example: "Avengers was successfully added to your favorites."
               </td>
           </tr>
           <tr>
+            <td> Add a movie to a user's list of favorites</td>
+            <td>/users/:Username/movies/:MovieID</td>
+            <td>POST</td>
+            <td>None</td>
+            <td>A text message indicating data about adding a movie by movieID to the favorites of users</td> 
+        </tr>
+          <tr>
               <td>Allow users to remove a movie from their list of favorites</td>
-              <td>/newUser/:id/favourites</td>
+              <td>/users/:id/favorites</td>
               <td>DELETE</td>
               <td>None</td>
-              <td>A text message indicating the user successfully removed a movie from their favourites
+              <td>A text message indicating the user successfully removed a movie from their favorites
                   <br>
-                  Example: "Avengers was successfully removed from your favourites."
+                  Example: "Avengers was successfully removed from your favorites."
               </td>
           </tr>
           <tr>
               <td>Allow existing users to deregister</td>
-              <td>/newUser</td>
+              <td>/users</td>
               <td>DELETE</td>
               <td>None</td>
-              <td>A text message indicating the user successfully removed a movie from their favourites
+              <td>A text message indicating the users are successfully removed</td>
                   <br>
                   Example: "Your account was successfully deleted."
-              </tr>
           </tr>
+          <tr>
+            <td>Delete a user by username</td>
+            <td>/users/:Username</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>A text message indicating the user is successfully removed by username</td>
+                <br>
+                Example: "Your account was successfully deleted."
+        </tr>
+          
       </table>
   </body>
 </html>
