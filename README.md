@@ -6,6 +6,7 @@ movies, directors, and genres. Users will be able to sign up, update their
 personal information, and create a list of their favorite movies.
 
 III)The 5 Ws:
+
 ● Who—Your immediate users will be frontend developers who’ll work on the client-side for the
 application based on what’s been documented on the server-side (in this case, this developer
 is also you!). You should also consider the users of the myFlix application. These will be
@@ -34,6 +35,7 @@ to this information, that their requests can be processed, and that all necessar
 stored.
 
 IV)Key Features:
+
 ● The API must be a Node.js and Express application.
 
 ● The API must use REST architecture, with URL endpoints corresponding to the data
