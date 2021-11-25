@@ -66,7 +66,7 @@ app.get('/movies/:title/genre', passport.authenticate('jwt',{session: false}), (
 });
 
 //Return data about a director (bio, birth year, death year) by name
-app.get('/movies/directors/:name',passport.authenticate('jwt',{session: false}), (req, res) => {
+app.get('/movies/directors/:name', passport.authenticate('jwt',{session: false}), (req, res) => {
     res.send('Successful GET request returning data about a director.');
 });
 
@@ -125,7 +125,7 @@ app.post('/users',
         Users
           .create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -193,20 +193,8 @@ app.put('/users/:Username',
   });
 });
 
-//// Updating the "username" 
-app.put('/users/:id/info',  (req, res) => {
-    res.send('Successful PUT request - user info is updated');
-});
-
-//Adding the movie to the favorites with id
-app.post('/users/:id/favorites',  (req, res) => {
-  let hashedPassword = Users.hashPassword(req.body.Password);
-    res.send('Successful POST request - user added a movie to their favourites');
-});
-
 // Add a movie to a user's list of favorites
-app.post('/users/:Username/movies/:MovieID',  (req, res) => {
-  let hashedPassword = Users.hashPassword(req.body.Password);
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt',{session: false}), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
@@ -232,7 +220,7 @@ app.delete('/users',  (req, res) => {
 });
 
 // Delete a user by username
-app.delete('/users/:Username',  (req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt',{session: false}), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
