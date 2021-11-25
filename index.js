@@ -71,7 +71,7 @@ app.get('/movies/directors/:name', passport.authenticate('jwt',{session: false})
 });
 
 // Get all users
-app.get('/users',  (req, res) => {
+app.get('/users', passport.authenticate('jwt',{session: false}), (req, res) => {
   Users.find()
     .then((users) => {
       res.status(201).json(users);
@@ -83,7 +83,7 @@ app.get('/users',  (req, res) => {
 });
 
 // Get a user by username
-app.get('/users/:Username',  (req, res) => {
+app.get('/users/:Username', passport.authenticate('jwt',{session: false}), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
       res.json(user);
@@ -164,7 +164,7 @@ app.put('/users/:Username',
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
-  ], (req, res) => {
+  ], passport.authenticate('jwt',{session: false}), (req, res) => {
 
     // check the validation object for errors
     let errors = validationResult(req);
@@ -209,15 +209,6 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt',{sessio
   });
 });
 
-//Removing movies from the favorites with id
-app.delete('/users/:id/favorites', (req, res) => {
-    res.send('Successful DELETE request - user removed movie from favourites');
-});
-
-//To deregister 
-app.delete('/users',  (req, res) => {
-    res.send('Successful DELETE request - user has deregistered');
-});
 
 // Delete a user by username
 app.delete('/users/:Username', passport.authenticate('jwt',{session: false}), (req, res) => {
