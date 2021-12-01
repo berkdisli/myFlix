@@ -40,9 +40,8 @@ app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
-// Gets the list of data about ALL movies
-app.get('/movies', passport.authenticate('jwt', 
-{ session: false }), (req, res) => {
+// Gets the list of data about ALL movies, passport.authenticate('jwt', { session: false }),
+app.get('/movies', (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(201).json(movies);
