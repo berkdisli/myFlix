@@ -225,6 +225,23 @@ app.delete('/users/:Username', passport.authenticate('jwt',{session: false}), (r
     });
 });
 
+
+// Delete movie from favorites
+app.delete('/users/:Username/favorites/:MovieID', passport.authenticate("jwt", { session: false }), (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username },
+    { $pull: { FavoriteMovies: req.params.MovieID } },
+    { new: true },
+    (err, updatedUser) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedUser);
+      }
+    }
+  );
+});
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('An error has been detected')

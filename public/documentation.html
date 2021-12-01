@@ -110,42 +110,6 @@
             <td>A text message indicating data about updating a user by username</td> 
         </tr>
           <tr>
-              <td>Allow users to update their user info (username)</td>
-              <td>/users/:id/info</td>
-              <td>PUT</td>
-              <td>A JSON object holding data about the updated user information
-                  <br>
-                  Example: {
-                    Username: 'Tupac_LA',
-                    Password: 'westside123',
-                    Email: 'tashakur@gmail.com',
-                    Birthday: "15/06/1971"
-                    }
-              </td>
-              <td>A text message indicating the user information was updated
-                  <br>
-                  Example: "Your username and password were successfuly updated."
-              </td>
-          </tr>
-          <tr>
-              <td>Allow users to add a movie to their list of favorites</td>
-              <td>/users/:id/favorites</td>
-              <td>POST</td>
-              <td>A JSON object holding data about a single movie, containing the title, genre, director and release year. 
-                  <br>
-                  Example: {
-                  title: 'Harry Potter and the Sorcerer's Stone',
-                  genre: ['Adventure', 'Family', 'Fantasy'],
-                  director: 'Chris Colombus',
-                  releaseYear: 2001
-                  }
-              </td>
-              <td>A text message indicating the user successfully added a new movie to their favorites
-                  <br>
-                  Example: "Avengers was successfully added to your favorites."
-              </td>
-          </tr>
-          <tr>
             <td> Add a movie to a user's list of favorites</td>
             <td>/users/:Username/movies/:MovieID</td>
             <td>POST</td>
@@ -153,23 +117,11 @@
             <td>A text message indicating data about adding a movie by movieID to the favorites of users</td> 
         </tr>
           <tr>
-              <td>Allow users to remove a movie from their list of favorites</td>
-              <td>/users/:id/favorites</td>
-              <td>DELETE</td>
-              <td>None</td>
-              <td>A text message indicating the user successfully removed a movie from their favorites
-                  <br>
-                  Example: "Avengers was successfully removed from your favorites."
-              </td>
-          </tr>
-          <tr>
-              <td>Allow existing users to deregister</td>
-              <td>/users</td>
-              <td>DELETE</td>
-              <td>None</td>
-              <td>A text message indicating the users are successfully removed</td>
-                  <br>
-                  Example: "Your account was successfully deleted."
+            <td>Remove movie from the favorite list with MovieID.</td>
+            <td>/users/:Username/favorites/:MovieID</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>A text message indicating movie was successfully remove.</td>
           </tr>
           <tr>
             <td>Delete a user by username</td>
