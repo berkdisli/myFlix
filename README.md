@@ -1,11 +1,11 @@
-I)Topic: myFlix 
+I)<h2>Topic: </h2> myFlix 
 
-II)User Goals: To build the server-side component of a “movies” web application. 
+II)<h2>User Goals:</h2> To build the server-side component of a “movies” web application. 
 The web application will provide users with access to information about different
 movies, directors, and genres. Users will be able to sign up, update their
 personal information, and create a list of their favorite movies.
 
-III)The 5 Ws:
+III)<h2>The 5 Ws:</h2>
 
 ● Who—Your immediate users will be frontend developers who’ll work on the client-side for the
 application based on what’s been documented on the server-side (in this case, this developer
@@ -34,7 +34,7 @@ directors, and genres. The server-side of the myFlix application will ensure the
 to this information, that their requests can be processed, and that all necessary data can be
 stored.
 
-IV)Key Features:
+IV)<h2>Key Features:</h2>
 
 ● The API must be a Node.js and Express application.
 
@@ -66,4 +66,4 @@ reading data from requests and morgan for logging.
 
 ● The API must be deployed to Heroku.
 
-V)Technologies: MERN (MongoDB, Express, React, and Node.js)
+V)<h2>Technologies:</h2> MERN (MongoDB, Express, React, and Node.js)
