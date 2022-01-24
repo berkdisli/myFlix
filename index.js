@@ -22,11 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 app.use(express.static('public'));
 
-// const cors = require('cors');
-// app.use(cors());
-// let auth = require('./auth')(app); //This ensures that Express is available in your “auth.js” file as well.
-// const passport = require('passport');
-// require('./passport');
+const cors = require('cors');
+app.use(cors());
+let auth = require('./auth')(app); //This ensures that Express is available in your “auth.js” file as well.
+const passport = require('passport');
+require('./passport');
 
 const { check, validationResult } = require('express-validator');
 
@@ -41,7 +41,7 @@ app.get('/documentation', (req, res) => {
 });
 
 // Gets the list of data about ALL movies, passport.authenticate('jwt', { session: false }),
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies', (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
